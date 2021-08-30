@@ -9,10 +9,11 @@ client.connect(8000, '127.0.0.1', () => {
 
 
 // creating a websocket to use client-side
-const websocket = new WebSocket.Server({ port: 8080 })
+const websocket = new WebSocket.Server({ port: 8081 })
 
 websocket.on("connection", ws => {
     client.on('data', (data) => {
+        console.log('connected')
         const dataString = data.toString()
 
 
