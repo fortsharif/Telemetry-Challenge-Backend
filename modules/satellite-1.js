@@ -30,9 +30,17 @@ module.exports = class SatelliteOne {
         }
     }
 
-    async getData(unixTimestamp) {
+    async getData(unixTimestamp, timeDeduction) {
         try {
-            let sql = `SELECT * FROM SatelliteOne WHERE Id>=(SELECT Id FROM SatelliteOne WHERE UnixTimestamp =)`
+            let time = unixTimestamp - timeDeduction
+            let sql = `SELECT DISTINCT *
+FROM (
+    SELECT *, ROW_NUMBER() OVER(PARTITION BY UnixTimestamp ORDER BY Id) rn
+    FROM SatelliteOne
+) x
+WHERE rn = 1 AND UnixTimestamp >= ${time}`
+            const data = await this.db.all(sql)
+            return data
         } catch (err) {
             throw err
         }
@@ -41,8 +49,11 @@ module.exports = class SatelliteOne {
 
     async getAll() {
         try {
+
             let sql = `SELECT * FROM SatelliteOne`
+
             const data = await this.db.all(sql)
+
             return data
         } catch (err) {
             throw err
