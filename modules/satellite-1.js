@@ -1,5 +1,5 @@
 const sqlite = require('sqlite-async')
-const stringConverter = require('../helper/util')
+const util = require('../helper/util')
 
 module.exports = class SatelliteOne {
     constructor(dbName = ':memory:') {
@@ -17,7 +17,7 @@ module.exports = class SatelliteOne {
         try {
             if (typeof (data) == "string") {
 
-                const newData = stringConverter(data)
+                const newData = util.stringConverter(data)
                 let UnixTimestamp = newData[0]
                 let TelemetryId = newData[1]
                 let Value = newData[2]

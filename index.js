@@ -4,7 +4,8 @@ const SatelliteOne = require('./modules/satellite-1')
 const dbName = 'telemetry.db'
 const cors = require('cors')
 const express = require('express')
-const stringConverter = require('./helper/util')
+const util = require('./helper/util')
+const { Socket } = require('dgram')
 
 let epoch
 
@@ -58,7 +59,20 @@ app.get("/api/v1/satellite1/day", async (req, res) => {
 
 // Connecting to the TCP-server
 const client = new net.Socket();
+const client2 = new net.Socket()
 
+/* client2.connect(8001, '127.0.0.1', () => {
+    console.log('connected binary')
+})
+
+client2.on('data', (data) => {
+    console.log(data)
+    let dataString = util.stringBuilder(data)
+    console.log(dataString)
+
+    //converting the buffer to
+
+}) */
 
 
 // creating a websocket to use client-side
@@ -72,8 +86,10 @@ websocket.on("connection", ws => {
     })
     client.on('data', async (data) => {
 
-        const dataString = data.toString()
-        newEpoch = stringConverter(dataString)[0]
+        let dataString = data.toString()
+        dataString = dataString.replace("[", "")
+        dataString = dataString.replace("]", "")
+        newEpoch = util.stringConverter(dataString)[0]
 
 
         if (epoch !== newEpoch) {
@@ -99,6 +115,7 @@ websocket.on("connection", ws => {
 
     ws.on("close", () => {
         console.log("disconnected")
+        client.destroy()
     })
 })
 
