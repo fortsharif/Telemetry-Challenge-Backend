@@ -5,3 +5,6 @@ back-end server for telemetry challenge
 
 `node index.js`
 
+## Front end UI can be found @
+`https://github.com/fortsharif/Telemetry-Challenge`
+
