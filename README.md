@@ -8,3 +8,4 @@ back-end server for telemetry challenge
 ## Front end UI can be found @
 `https://github.com/fortsharif/Telemetry-Challenge`
 
+## It is important that the groundstation emulator is running.
